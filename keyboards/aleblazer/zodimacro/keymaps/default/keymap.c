@@ -17,10 +17,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 	[0] = LAYOUT(
-      KC_ESC, C(KC_S), C(KC_C), C(KC_V), KC_F13, KC_F14, 
+      KC_ESC, C(KC_S), C(KC_C), C(KC_V), KC_F13, KC_DEL,
       KC_F15, KC_F16, KC_F17, KC_F18, KC_F19, KC_F20,  KC_F21,
-      KC_F22, KC_F23,  KC_F24,    C(KC_F13),    C(KC_F14),    C(KC_F15), C(KC_F15),
-      C(KC_F16), C(KC_F17),    C(KC_F18),    C(KC_F18),    C(KC_F19),    C(KC_F20),  C(KC_F20), KC_MUTE,
+      KC_F22, KC_F23,  KC_F24,    C(KC_F13),    C(KC_F14),    C(KC_F15), C(KC_F16),
+      C(KC_F17), C(KC_F18),    C(KC_F19),    C(KC_F20),    C(KC_F21),    C(KC_F22),  C(KC_F23), KC_MUTE,
       S(KC_F13), S(KC_F14), S(KC_F15), S(KC_F16), S(KC_F17),  S(KC_F18),   KC_ENT
     ),
 
