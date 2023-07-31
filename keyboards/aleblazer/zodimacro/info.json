@@ -1,7 +1,7 @@
 {
     "keyboard_name": "zodiarm",
-    "manufacturer": "Split Logic Keyboards",  
-    "url": "https://github.com/Aleblazer/qmk_firmware/tree/master/keyboards/zodiark", 
+    "manufacturer": "Split Logic Keyboards",
+    "url": "https://github.com/Aleblazer/qmk_firmware/tree/master/keyboards/zodiark",
     "maintainer": "Aleblazer",
     "bootloader": "stm32-dfu",
     "processor": "STM32F411",
@@ -27,7 +27,7 @@
     "diode_direction": "COL2ROW",
     "encoder": {
         "rotary": [
-            { "pin_a": "A8", "pin_b": "A9" }
+            { "pin_a": "B3", "pin_b": "A15" }
         ]
     },
     "matrix_pins": {
