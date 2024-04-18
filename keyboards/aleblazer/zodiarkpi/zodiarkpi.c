@@ -13,9 +13,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "quantum.h"
 #include "print.h"
-#include "images/ZodiarkPiLogoGC.qgf.c"
-#include "images/ZodiarkPiLogo2Green.qgf.c"
-#include "images/ZodiarkPiLogoSTpink.qgf.c"
 
 #ifdef RGB_MATRIX_ENABLE
 led_config_t g_led_config = { {
@@ -176,11 +173,16 @@ bool encoder_update_kb(uint8_t index, bool clockwise) {
 
 #ifdef QUANTUM_PAINTER_ENABLE
 
+#include "images/ZodiarkPiLogoGC.qgf.c"
+#include "images/ZodiarkPiLogo2Green.qgf.c"
+#include "images/ZodiarkPiLogoSTpink.qgf.c"
+
 static painter_device_t display;
 static painter_image_handle_t image;
 
-
+// st7789 enable, comment out the following line if not using a st7789
 painter_device_t qp_st7789_make_spi_device(uint16_t panel_width, uint16_t panel_height, pin_t chip_select_pin, pin_t dc_pin, pin_t reset_pin, uint16_t spi_divisor, int spi_mode);
+// gc9a01 enable, comment out the following line if not using a gc9a01
 // painter_device_t qp_gc9a01_make_spi_device(uint16_t panel_width, uint16_t panel_height, pin_t chip_select_pin, pin_t dc_pin, pin_t reset_pin, uint16_t spi_divisor, int spi_mode);
 
 void keyboard_post_init_user(void) {
@@ -195,7 +197,7 @@ uint32_t deferred_init(uint32_t trigger_time, void *cb_arg) {
 
     print("doing stuff\n");
 
-    // ##ST7789 screen support
+// ##st7789 screen support, comment out this section if not using a st7789 screen
     display = qp_st7789_make_spi_device(320, 240, LCD_CS_PIN, LCD_DC_PIN, LCD_RST_PIN, LCD_SPI_DIVISOR, 3);
     if (is_keyboard_left()) {
         qp_power(display, true);
@@ -214,20 +216,24 @@ uint32_t deferred_init(uint32_t trigger_time, void *cb_arg) {
     // else {
     //     image = qp_load_image_mem(gfx_ZodiarkPiLogoSTpink);
     // }
-    // ##end ST7789 screen support
+    // ##end st7789 screen support
 
-    // ##GC9A01 screeen support
+    // ##gc9a01 screeen support, comment out this section if not using a gc9a01 screen
     // display = qp_gc9a01_make_spi_device(240, 240, LCD_CS_PIN, LCD_DC_PIN, LCD_RST_PIN, LCD_SPI_DIVISOR, 0);
     // qp_power(display, true);
     // if (is_keyboard_left()) {
     //     qp_init(display, QP_ROTATION_0);
-    //     } else {
+    //     } 
+    // If using pointing device on right side, comment out following 3 lines
+    //     else {
     //     qp_init(display, QP_ROTATION_0);
     //     }
 
     //     if (is_keyboard_left()) {
     //     image = qp_load_image_mem(gfx_ZodiarkPiLogoGC);
-    // } else {
+    //      } 
+    // If using pointing device on right side, comment out following 3 lines
+    //     else {
     //     image = qp_load_image_mem(gfx_ZodiarkPiLogoGC);
     // }
     // ##end GC9A01 screeen support
