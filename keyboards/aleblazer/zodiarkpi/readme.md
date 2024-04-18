@@ -1,11 +1,11 @@
-# ZodZero
+# ZodiarkPi
 
 ![ZodiarkPi](https://i.imgur.com/iOvyZLMh.jpeg)
 
-WIP
+WIP (Ignore the picture of the ZodZero)
 
 * Keyboard Maintainer: [Aleblazer](https://github.com/Aleblazer/), [Discord Link](https://discord.gg/BCSbXwskVt)
-* Hardware Supported: Raspberry Pi Pico
+* Hardware Supported: Raspberry Pi Pico/Waveshare RP2040 Plus
 * Hardware Availability: [Split Logic Keyboards](https://splitlogic.xyz/)
 
 ## Make example for this keyboard (after setting up your build environment):
