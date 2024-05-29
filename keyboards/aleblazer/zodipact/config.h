@@ -20,6 +20,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define SPI_MOSI_PIN GP11
 #define SPI_MISO_PIN GP28
 
+#define BACKLIGHT_PIN GP25
+
 // SplitHands config
 #define SPLIT_HAND_PIN GP29
 
