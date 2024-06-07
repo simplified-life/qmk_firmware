@@ -173,7 +173,8 @@ bool encoder_update_kb(uint8_t index, bool clockwise) {
 
 #ifdef QUANTUM_PAINTER_ENABLE
 
-#include "images/ZodiarkPiLogoGC.qgf.c"
+#include "images/FFTwheel.qgf.c"
+#include "images/Zodipact240.qgf.c"
 
 static painter_device_t display;
 static painter_image_handle_t image;
@@ -195,16 +196,16 @@ uint32_t deferred_init(uint32_t trigger_time, void *cb_arg) {
     display = qp_gc9a01_make_spi_device(240, 240, LCD_CS_PIN, LCD_DC_PIN, LCD_RST_PIN, LCD_SPI_DIVISOR, 0);
     qp_power(display, true);
     if (is_keyboard_left()) {
-        qp_init(display, QP_ROTATION_0);
+        qp_init(display, QP_ROTATION_180);
         } 
         else {
-        qp_init(display, QP_ROTATION_0);
+        qp_init(display, QP_ROTATION_180);
         }
         if (is_keyboard_left()) {
-        image = qp_load_image_mem(gfx_ZodiarkPiLogoGC);
+        image = qp_load_image_mem(gfx_Zodipact240);
          } 
         else {
-        image = qp_load_image_mem(gfx_ZodiarkPiLogoGC);
+        image = qp_load_image_mem(gfx_FFTwheel);
     }
 
     if (image != NULL) {

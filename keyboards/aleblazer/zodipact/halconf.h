@@ -15,7 +15,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 // Comment the following line out if using blue prototype boards
-#define HAL_USE_SIO TRUE
+//#define HAL_USE_SIO TRUE
 
 // Comment the following line out if using dual encoders
 // #define HAL_USE_I2C TRUE

@@ -29,7 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define SERIAL_USART_FULL_DUPLEX
 #define SERIAL_USART_TX_PIN GP0
 #define SERIAL_USART_RX_PIN GP1
-#define SERIAL_USART_DRIVER SIOD0
+//#define SERIAL_USART_DRIVER SIOD0
 
 // Serial PIO Driver configs for blue Prototypes, comment out if using the any other board
 // #define SERIAL_USART_PIN_SWAP
@@ -46,6 +46,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // RGB Matrix Config
 #ifdef RGB_MATRIX_ENABLE
+#define RGB_MATRIX_MAXIMUM_BRIGHTNESS 175
      /* RGB Defines */
 #define WS2812_DI_PIN GP2
 #define RGB_MATRIX_LED_COUNT 88
