@@ -23,7 +23,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define BACKLIGHT_PIN GP25
 
 // SplitHands config
-#define SPLIT_HAND_PIN GP29
+#define SPLIT_HAND_MATRIX_GRID GP22, GP14
+#define SPLIT_HAND_MATRIX_GRID_LOW_IS_LEFT
 
 // Serial config
 #define SERIAL_USART_FULL_DUPLEX

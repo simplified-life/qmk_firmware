@@ -14,20 +14,8 @@
         "pid": "0xF921",
         "device_version": "0.0.1"
     },
-    "encoder": {
-        "rotary": [
-                {"pin_a": "GP24", "pin_b": "GP23", "resolution": 2}
-            ]
-        },
     "split": {
-        "enabled": true,
-         "encoder": {
-                "right": {
-                    "rotary": [
-                        {"pin_a": "GP23", "pin_b": "GP24", "resolution": 2}
-                    ]
-                }
-            }
+        "enabled": true
         },
     "diode_direction": "COL2ROW",
 	"matrix_pins": {
