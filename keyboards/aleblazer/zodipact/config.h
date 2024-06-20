@@ -25,6 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // SplitHands config
 #define SPLIT_HAND_MATRIX_GRID GP22, GP14
 #define SPLIT_HAND_MATRIX_GRID_LOW_IS_LEFT
+#define MATRIX_MASKED
 
 // Serial config
 #define SERIAL_USART_FULL_DUPLEX

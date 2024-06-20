@@ -14,7 +14,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "quantum.h"
 #include "print.h"
 
-
+const matrix_row_t matrix_mask[] = {
+    0b0111111,
+    0b1111111,
+    0b1111111,
+    0b1111111,
+    0b1111111,
+    0b0111111,
+    0b1111111,
+    0b1111111,
+    0b1111111,
+    0b1111111,
+};
 
 #ifdef RGB_MATRIX_ENABLE
 led_config_t g_led_config = { {
