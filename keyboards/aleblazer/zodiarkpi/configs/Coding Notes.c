@@ -8,7 +8,7 @@ https://docs.qmk.fm/features/pointing_device#examples
 
 
 ///////////////////////////////////////////
-//KEYMAPS
+//KEYMAPS - make sure to check out examples and consider adding a colemak layer
 //////////////////////////////////////////
 //WORK ON MEDIA KEYS AND OTHER SHORTCUTS
 Web browsing Back/Forward, third mouse button
