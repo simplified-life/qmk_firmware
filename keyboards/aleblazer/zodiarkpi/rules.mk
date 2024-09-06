@@ -1,0 +1,9 @@
+SERIAL_DRIVER = vendor
+ENCODER_ENABLE = yes
+MOUSEKEY_ENABLE  = yes
+EXTRAKEY_ENABLE  = yes
+RGB_MATRIX_ENABLE = yes
+RGB_MATRIX_DRIVER = ws2812
+WS2812_DRIVER = vendor
+VIA_ENABLE = yes
+SLEEP_LED_ENABLE = yes							# LEDs inactive when computer is sleeping

@@ -1,0 +1,2 @@
+#define SOLENOID_PIN GP28
+#define SPLIT_HAPTIC_ENABLE
