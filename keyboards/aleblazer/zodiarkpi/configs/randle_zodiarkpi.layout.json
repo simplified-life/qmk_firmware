@@ -2,8 +2,8 @@
   "name": "ZodiarkPi",
   "vendorProductId": 4177656096,
   "macros": [
-    "{+KC_LCTL}{+KC_TAB}{+KC_LALT}{-KC_TAB}{-KC_LALT}{-KC_LCTL}",
-    "{+KC_LGUI}{+KC_LSFT}s{-KC_LGUI}{-KC_LSFT}",
+    "{KC_LCTL,KC_LALT,KC_TAB}",
+    "{KC_LGUI,KC_LSFT,KC_S}",
     "",
     "",
     "",
