@@ -1,3 +1,21 @@
+/*
+Copyright 2024 SimplifiedLife https://github.com/simplified-life
+Copyright 2024 QMK User Manual
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #ifdef OLED_ENABLE
 
 	led_t led_usb_state;
@@ -7,17 +25,12 @@
         return OLED_ROTATION_180;
     }
 
-    enum layer_names {
-        _QWERTY,    //BASE LAYER (QUERTY)
-        _LOWER,     //NUMPAD LAYER
-        _RAISE,     //MOUSE LAYER
-        _ADJUST,    //SETTINGS LAYER
-        _EXTRA      //UNUSED
-    };
 
-
-    static const char qwerty_img [] PROGMEM = {
-        // 'Keyboard Layers_B', 128x64px //Layer for Base or Qwerty
+/////////////////////////////////
+/* IMAGES FOR DIFFERENT LAYERS */
+/////////////////////////////////
+    static const char base_img [] PROGMEM = {
+        // 'Keyboard Layer_0', 128x64px //Layer for Base or Qwerty
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -84,9 +97,9 @@
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     };
 
-    static const char lower_img [] PROGMEM = {
-        // 'Keyboard Layers_1', 128x64px //Layer for Numpad
-        // 'Keyboard Layers_Numpad', 128x64px
+    static const char numpad_img [] PROGMEM = {
+        // 'Keyboard Layer_1', 128x64px //Layer for Numpad
+        // 'Keyboard Layer_Numpad', 128x64px
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -153,8 +166,8 @@
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     };
 
-    static const char raise_img [] PROGMEM = {
-        // 'Keyboard Layers_2', 128x64px //Layer for Mouse
+    static const char mouse_img [] PROGMEM = {
+        // 'Keyboard Layer_2', 128x64px //Layer for Mouse
         // 'Keyboard Layers_Mouse', 128x64px
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -222,8 +235,8 @@
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     };
 
-    static const char adjust_img [] PROGMEM = {
-        // 'Keyboard Layers_3', 128x64px //adjust layer for settings
+    static const char settings_img [] PROGMEM = {
+        // 'Keyboard Layer_3', 128x64px //layer for settings and reboot
         // 'Keyboard Layers_Settings', 128x64px
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -292,7 +305,7 @@
     };
 
     static const char extra_img [] PROGMEM = {
-        // 'Keyboard Layers_4', 128x64px
+        // 'Keyboard Layers_4', 128x64px // Extra Layer for alternative keyboard like ColemakDH
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -359,9 +372,13 @@
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     };
 
+/////////////////////////////////
+/* OLED Screen Updates */
+/////////////////////////////////
 
-//timer to ensure screen goes off
+
 bool oled_task_user(void){
+    //timer to ensure screen goes off
     if (last_input_activity_elapsed() > (20000)) {
         oled_off();
         return false;
@@ -370,31 +387,32 @@ bool oled_task_user(void){
     }
      // Switch on current active layer
     switch (get_highest_layer(layer_state)) {
-        case _QWERTY :
+        case _BASE :
             /*oled_write("Main Layer", false);*/
-            oled_write_raw_P(qwerty_img, sizeof(qwerty_img));
+            oled_write_raw_P(base_img, sizeof(base_img));
             break;
-        case _RAISE :
-            oled_write_raw_P(raise_img, sizeof(raise_img));
+        case _NUMPAD :
+            oled_write_raw_P(numpad_img, sizeof(numpad_img));
             break;
-        case _LOWER :
-            oled_write_raw_P(lower_img, sizeof(lower_img));
+        case _MOUSE :
+            oled_write_raw_P(mouse_img, sizeof(mouse_img));
             break;
-        case _ADJUST :
-            oled_write_raw_P(adjust_img, sizeof(adjust_img));
+        case _SETTINGS :
+            oled_write_raw_P(settings_img, sizeof(settings_img));
             break;
         case _EXTRA :
             oled_write_raw_P(extra_img, sizeof(extra_img));
             break;
     }
 
-    // Host Keyboard LED Lock Status
+    // Host Keyboard LED Lock Status for CAPS/NUM/SCROLL
+    // Locate lock status under layer picture.
+
     led_t led_state = host_keyboard_led_state();
     oled_set_cursor(12,7);
     oled_write(led_state.num_lock ? PSTR("NUM") : PSTR("   "), false);
     oled_set_cursor(15,7);
     oled_write(led_state.caps_lock ? PSTR("CAP") : PSTR("   "), false);
- //   oled_write_raw_P(capslock_img, sizeof(capslock_img));
     oled_set_cursor(18,7);
     oled_write(led_state.scroll_lock ? PSTR("SCR") : PSTR("   "), false);
 

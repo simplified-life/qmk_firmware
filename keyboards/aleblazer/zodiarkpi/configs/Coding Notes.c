@@ -1,7 +1,7 @@
 //VOLUME SCROLL for cirque (See also DKAO if he ever gets back to me)
 https://www.reddit.com/r/ploopy/comments/l32k9l/qmk_detect_direction_of_scroll_wheelmouse_movement/
 https://blog.slinkyworks.net/running-custom-qmk-on-a-ploopy-mini-trackball/
-
+https://github.com/shaleh/qmk_firmware/tree/my-ploopy-adept/keyboards/ploopyco/common
 
 //Set precision  mode for cirque? Toggle through DPI and turn off auto mouse on some layers
 https://docs.qmk.fm/features/pointing_device#examples
@@ -18,7 +18,9 @@ Highlight words, paragraphs + Other
 Integrate with Windows Powertoys?
 //TAP DANCE KEYS consider some tap dance keys (double tap for an alternative - could be good for brackets, caps lock or similar)
 TAP_DANCE_ENABLE = yes
-
+TAB through windows from a double tap.... caps lock hold for a double tap shift to caps a word or similar?
+//consider the ability to record custom macros using the settings layer or something so that when doing repetitive tasks the tasks can be automated
+Example: select word nearest to cursor, highlight, paste clipboard over
 
 
 
@@ -131,3 +133,89 @@ bool oled_task_user() {
 }
 // END OF SUPER BASIC TEST
 /////////////////////////////////////
+
+
+
+
+DYNAMIC MACROS
+
+Back to TopSee full docs
+Record and play back sequences of keystrokes. Note: macros are not kept in memory after the keyboard is unplugged.
+
+Step 1: Setup
+in keymap.c:
+enum planck_keycodes {
+    QWERTY = SAFE_RANGE,
+    COLEMAK,
+    DVORAK,
+    PLOVER,
+    LOWER,
+    RAISE,
+    BACKLIT,
+    EXT_PLV,
+    DYNAMIC_MACRO_RANGE,
+};
+
+// this is called when dynamic macro buffer is full
+void backlight_toggle(void) {
+    // INSERT CODE HERE: for example, call function to turn on indicator LED.
+}
+
+#include "dynamic_macro.h"`
+in keymap.c, in `process_record_user` function (create function if it doesn't exist):
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    if (!process_record_dynamic_macro(keycode, record)) {
+        return false;
+    }
+    return true;
+}
+
+Step 2: Use
+in keymap.c, in your KEYMAP():
+Keycode
+to be added to your call to KEYMAP()
+Description
+DYN_REC_START1
+Start recording Macro 1
+DYN_REC_START2
+Start recording Macro 2
+DYN_REC_STOP
+Stop recording current Macro
+DYN_MACRO_PLAY1
+Replay Macro 1
+DYN_MACRO_PLAY2
+Replay Macro 2
+
+
+TAP DANCE
+Back to TopSee full docs
+Send different key codes depending on how many times key is tapped. Tap key once does one thing, tap twice does another thing, etc.
+
+Step 1: Setup
+in rules.mk:
+TAP_DANCE_ENABLE = yes
+in config.h:
+#define TAPPING_TERM 200
+Step 2: Declare
+Create an entry for each tap dance in an enum. Replace YOUR_TAPDANCE_1, YOUR_TAPDANCE_2, etc., with the names of your tap dances.
+
+in keymap.c, before KEYMAP():
+// Tap Dance Declarations
+enum {
+    YOUR_TAPDANCE_1 = 0,
+    YOUR_TAPDANCE_2,
+    // ..., the rest of your tap dances
+};
+Step 3: Define
+in keymap.c, before KEYMAP():
+// Tap Dance Definitions
+qk_tap_dance_action_t tap_dance_actions[] = {
+    // simple tap dance
+    [YOUR_TAPDANCE_1] = ACTION_TAP_DANCE_DOUBLE(KC_XXXX, KC_YYYY), // replace with your keycodes. BASIC codes only, no custom codes.
+
+    // complex tap dance function (to specify what happens when key is pressed 3+ times, for example). See full docs for how to define
+    [YOUR_TAPDANCE_2] = ACTION_TAP_DANCE_FN(your_function_name),
+};
+Step 4: Use
+in keymap.c, in your KEYMAP():
+TD(YOUR_TAPDANCE_1)

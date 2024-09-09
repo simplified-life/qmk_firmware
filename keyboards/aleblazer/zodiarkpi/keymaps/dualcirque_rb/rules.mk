@@ -1,8 +1,10 @@
 POINTING_DEVICE_DRIVER = cirque_pinnacle_spi
-POINTING_DEVICE_ENABLE = yes
+POINTING_DEVICE_ENABLE = yes			# cannot be used in conjuction with SPLIT_POINTING_ENABLE??
+QUANTUM_PAINTER_ENABLE = no				# used for when using an SPI TFT screen
 MOUSEKEY_ENABLE = yes
 OLED_ENABLE = yes
 OLED_TRANSPORT = i2c
 OLED_DRIVER = ssd1306
 SPLIT_KEYBOARD = yes
 CAPS_WORD_ENABLE = yes
+SLEEP_LED_ENABLE = yes							# LEDs inactive when computer is sleeping
