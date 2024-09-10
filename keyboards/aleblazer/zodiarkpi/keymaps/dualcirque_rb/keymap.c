@@ -26,33 +26,75 @@ enum layer_names {
     _EXTRA          //UNUSED - SUGGESTED COLEMAK DH OR ALTERNATIVE
 };
 
-/* Custom Keycodes Particularly for Macros*/
-//MACRO 1 SCR_SHOT = {KC_LCTL,KC_LALT,KC_TAB}
-//MACRO 2 W_SWTCH = {KC_LGUI,KC_LSFT,KC_S}
-enum custom_keycodes {
+
+enum custom_keycodes {          // See below in process_record_user for purpose of custom keycode
   DRAG_SCROLL = SAFE_RANGE,
   SCR_SHOT,
   W_SWTCH,
+  AM_Togl,
+  DRAG_VOLUME,
+  DRAG_PAN,
+  DRAG_BRIGHTNESS,
+  DRAG_HORIZONTAL,
+  DRAG_RWFF,
+  MOUSE_PRECISION,
 };
 
-/* Variable for Drag Scroll in cirque*/
+/*Enable Auto Mouse */
+void pointing_device_init_user(void) {
+//  set_auto_mouse_layer(<mouse_layer>); // only required if AUTO_MOUSE_DEFAULT_LAYER is not set to index of <mouse_layer>
+    set_auto_mouse_enable(true);         // always required before the auto mouse feature will work
+    cirque_pinnacle_configure_cursor_glide(5); //motion of cursor continues when flicked
+}
+/* Variable for Drag Scroll in cirque and global variable for passing keycode*/
 bool set_scrolling = false;
+static uint16_t current_keycode = KC_NO;
+uint16_t get_current_keycode(void) {
+    return current_keycode;
+}
+/* Variable to turn on/off Auto Mouse in cirque*/
+bool auto_mouse_tg_off = false;
+/* Precision Mode for Cirque Mouse */
+bool cirque_precision_tg_off = false;
+#define CIRQUE_DPI_DEFAULT 2000 //used for cirque as mouse
+#define CIRQUE_DPI_PRECISION 400 //used for cirque to set in lower dpi in precision mode
 
 /*Processing of user input for handling alternate actions*/
 bool process_record_user(uint16_t keycode, keyrecord_t * record) {
   switch (keycode) {
      case DRAG_SCROLL: // Toggle set_scrolling when DRAG_SCROLL key is pressed or released
+     case DRAG_VOLUME:
+     case DRAG_PAN:
+     case DRAG_BRIGHTNESS:
+     case DRAG_HORIZONTAL:
+     case DRAG_RWFF:
+         if(record->event.pressed) { // key down
          set_scrolling = record->event.pressed;
+         current_keycode = keycode;
+         } else {
+            // Clear the global variable when the key is releasec
+            if (current_keycode == keycode) {
+            current_keycode = KC_NO;
+            }
+         }
          break;
-    case W_SWTCH:  // Windows function to take a screenshot
-      if (record->event.pressed) {
-        SEND_STRING("KC_LCTL,KC_LALT,KC_TAB");
-      }
+     case MOUSE_PRECISION: //update DPI values for Cirque
+            if(record->event.pressed) { // key down
+                if(cirque_precision_tg_off) {
+                pointing_device_set_cpi_on_side(false, CIRQUE_DPI_DEFAULT); //Set cpi on right side to a default value for mousing.
+                cirque_precision_tg_off = !cirque_precision_tg_off;
+                } else{
+                pointing_device_set_cpi_on_side(false, CIRQUE_DPI_PRECISION); //Set cpi on right side to a precision value for mousing.
+                cirque_precision_tg_off = !cirque_precision_tg_off;
+                }
+            } // do nothing on key up
         break;
-    case SCR_SHOT:  // Windows function to switch windows
-      if (record->event.pressed) {
-        SEND_STRING("KC_LGUI,KC_LSFT,KC_S");
-      }
+     case AM_Togl:     // toggle auto mouse enable key
+            if(record->event.pressed) { // key down
+                auto_mouse_layer_off(); // disable target layer if needed
+                set_auto_mouse_enable((AUTO_MOUSE_ENABLED) ^ 1);
+                auto_mouse_tg_off = !get_auto_mouse_enable();
+            } // do nothing on key up
         break;
     default:
         break;
@@ -81,26 +123,26 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 //NUMPAD
 	[1] = LAYOUT(
       _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,                                         KC_F6,   KC_F7,   KC_F8,   KC_F9,    KC_F10,  KC_F11,
-      _______, _______, KC_UP,   _______, _______, _______,                                       KC_PSLS, KC_P7,   KC_P8,   KC_P9,    KC_P0,   _______,
-      _______, KC_LEFT, KC_DOWN, KC_RGHT, KC_BTN1, KC_BTN2, _______, _______,  _______, _______,  KC_PMNS, KC_P4,   KC_P5,   KC_P6,    KC_PAST, KC_F12,
+      _______, _______, KC_UP,   _______, _______, KC_NUM,                                        KC_PSLS, KC_P7,   KC_P8,   KC_P9,    KC_P0,   _______,
+      _______, KC_LEFT, KC_DOWN, KC_RGHT, _______, KC_SCRL, _______, _______,  _______, _______,  KC_PMNS, KC_P4,   KC_P5,   KC_P6,    KC_PAST, KC_F12,
       _______, _______, _______, _______, KC_MPLY, KC_MUTE, KC_VOLD, KC_VOLU,  RGB_TOG, TT(0),    KC_PDOT, KC_P1,   KC_P2,   KC_P3,    _______, _______,
-      _______, _______, KC_HOME, KC_END,  _______, _______, TO(2),             TO(3),             _______,  _______, _______, _______, _______, _______
+      _______, _______, KC_HOME, KC_END,  _______, _______,            TO(2),  TO(3),             _______,  _______, _______, _______, _______, _______
       ),
 //MOUSE
 	[2] = LAYOUT(
-      _______, KC_F1, KC_F2,   KC_F3,   KC_F4,     KC_F5,                                         KC_F6,   KC_F7,   KC_F8,  KC_F9,   KC_F10,  KC_F11,
-      KC_PSLS, KC_P7, KC_P8,   KC_P9,   _______,   KC_NUM,                                        KC_BTN1, KC_BTN2, KC_NO,  KC_NO,   KC_NO,   _______,
-      KC_CAPS, KC_P4, KC_P5,   KC_P6,   KC_LCTL,   KC_SCRL, _______, _______,  _______, _______,  TT(0),   KC_NO,   KC_NO,  KC_BTN3, KC_NO,   KC_F12,
-      _______, KC_P1, KC_P2,   KC_P3,   _______,   _______, _______, _______,  _______,  TT(0),   _______, _______, KC_NO,  KC_NO,   KC_NO,   _______,
-      _______, KC_P0, KC_PDOT, KC_PENT, _______,   _______, TO(3),             TO(1),             _______, _______, _______,_______, _______, _______
+      _______, KC_F1, KC_F2,   KC_F3,   KC_F4,     KC_F5,                                                     KC_F6,            KC_F7,   KC_F8,  KC_F9,   KC_F10, KC_F11,
+      KC_PSLS, KC_P7, KC_P8,   KC_P9,   KC_BTN3,   KC_BTN1,                                                   KC_BTN1,          KC_BTN2, KC_NO,  KC_NO,   KC_NO,  _______,
+      KC_CAPS, KC_P4, KC_P5,   KC_P6,   KC_LCTL,   KC_BTN2, _______, _______,                _______, _______,MOUSE_PRECISION,   KC_NO,   KC_NO,  KC_BTN3, KC_NO,  KC_F12,
+      _______, KC_P1, KC_P2,   KC_P3,   _______,   DRAG_BRIGHTNESS, DRAG_VOLUME, DRAG_RWFF,  _______,  TT(0), _______,          _______, KC_NO,  KC_NO,   KC_NO,  _______,
+      _______, KC_P0, KC_PDOT, KC_PENT, _______,   DRAG_PAN, DRAG_HORIZONTAL,                TO(1),           _______,          _______, _______,_______, _______,_______
       ),
 //SETTINGS
 	[3] = LAYOUT(
       QK_BOOT, TO(0),   TO(1),   TO(2),   TO(3),   TO(4),                                         _______, _______, _______, _______, _______, QK_BOOT,
-      _______, _______, _______, _______, _______, _______,                                       _______, _______, _______, _______, _______, _______,
-      _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,   _______, _______, _______, _______, _______, _______,
+      AM_Togl, _______, _______, _______, _______, _______,                                       _______, _______, _______, _______, _______, _______,
+      EE_CLR,  _______, _______, _______, _______, _______, _______, _______, _______, _______,   _______, _______, _______, _______, _______, _______,
       _______, _______, _______, _______, _______, _______, _______, _______, _______, TT(0),     RGB_TOG, RGB_MOD, RGB_SPI, RGB_HUI, RGB_SAI, RGB_VAI,
-      _______, _______, _______, _______, _______, _______, TO(2),             TO(1),             _______, RGB_RMOD,RGB_SPD, RGB_HUD, RGB_SAD, RGB_VAD
+      _______, _______, _______, _______, _______, _______,            TO(2),  TO(1),             _______, RGB_RMOD,RGB_SPD, RGB_HUD, RGB_SAD, RGB_VAD
       ),
 
 //COLEMAK DH
@@ -109,8 +151,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       _______, _______, _______,    KC_F,    KC_P,    KC_B,                                        KC_J,    KC_L,    KC_U,    KC_Y, KC_SCLN, _______,
       _______, _______,    KC_R,    KC_S,    KC_T, _______, _______, _______, _______, _______,    KC_M,    KC_N,    KC_E,    KC_I,    KC_O, _______,
       _______, _______, _______, _______,    KC_D, _______, _______, _______, _______, TT(0),      KC_K,    KC_H, _______, _______, _______, _______,
-      _______, _______, _______, _______, _______, _______, _______,          _______,          _______, _______, _______, _______, _______, _______
+      _______, _______, _______, _______, _______, _______,          _______, _______,          _______, _______, _______, _______, _______, _______
       )
 
 };
 
+/* REFERENCE (not programming guide) Custom Keycodes Particularly for Macros*/
+//MACRO 1 SCREEN_SHOT = {KC_LCTL,KC_LALT,KC_TAB}
+//MACRO 2 WINDOW_SWITCH = {KC_LGUI,KC_LSFT,KC_S}

@@ -6,6 +6,9 @@ https://github.com/shaleh/qmk_firmware/tree/my-ploopy-adept/keyboards/ploopyco/c
 //Set precision  mode for cirque? Toggle through DPI and turn off auto mouse on some layers
 https://docs.qmk.fm/features/pointing_device#examples
 
+//Have an array of precision modes for precision scrolling
+https://blog.slinkyworks.net/running-custom-qmk-on-a-ploopy-mini-trackball/
+
 
 ///////////////////////////////////////////
 //KEYMAPS - make sure to check out examples and consider adding a colemak layer
@@ -80,6 +83,47 @@ bool encoder_update_kb(uint8_t index, bool clockwise) {
     if (!encoder_update_user(index, clockwise)) {
       return false; /* Don't process further events if user function exists and returns false *
 ...
+
+/*
+////FUNCTIONS
+is_auto_mouse_active(void)	Returns the active state of the auto mouse layer (eg if the layer has been triggered)		bool
+auto_mouse_keyevent(bool pressed)	Auto mouse mouse key event (true: key down, false: key up)	void(None)
+get_auto_mouse_toggle(void)	Return value of toggling state variable	bool
+
+keyboard_config_t keyboard_config;
+uint16_t          dpi_array[] = CIRQUE_DPI_OPTIONS;
+#define DPI_OPTION_SIZE ARRAY_SIZE(dpi_array)
+
+uint16_t lastScroll        = 0; // Previous confirmed wheel event
+uint16_t lastMidClick      = 0; // Stops scrollwheel from being read if it was pressed
+*/
+
+/* LOGIC FLOW
+DEFINE MOUSE KEYS AND FUNCTIONS
+KC_VOLU / KC_VOLD //volume
+KC_MS_WH_UP / KC_MS_WH_DOWN //vertical scrolling
+KC_BRIU / KC_BRID //screen brightness
+KC_MS_WH_LEFT / KC_MS_WH_RIGHT //horizontal scrolling
+KC_MRWD / KC_MFFD //fast foward / rewind media (horizontal movement)
+PRECISION  - reduce DPI for RIGHT mouse
+
+SCROLLING_KEYCODE
+
+DRAG_VOLUME
+DRAG_VERTICAL
+DRAG_BRIGHTNESS
+DRAG_HORIZONTAL
+DRAG_RWFF
+MOUSE_PRECISION
+
+
+PROCESS MOUSE REPORT
+SCALE FOR TASK
+TRANSLATE to KEY PRESSES WHILE MOUSE KEY IS PRESSED
+
+
+
+*/
 
 
 
