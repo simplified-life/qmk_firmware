@@ -8,7 +8,7 @@
     #define CIRQUE_PINNACLE_TAP_ENABLE
     #define CIRQUE_PINNACLE_TAPPING_TERM 100
     #define POINTING_DEVICE_TASK_THROTTLE_MS 5
-    #define POINTING_DEVICE_GESTURES_CURSOR_GLIDE_ENABLE //motion of cursor continues when flicked
+//  #define POINTING_DEVICE_GESTURES_CURSOR_GLIDE_ENABLE //motion of cursor continues when flicked
     #define POINTING_DEVICE_COMBINED            // two pointing devices
     #define POINTING_DEVICE_ROTATION_180        // for cirque on the left
     #define POINTING_DEVICE_AUTO_MOUSE_ENABLE

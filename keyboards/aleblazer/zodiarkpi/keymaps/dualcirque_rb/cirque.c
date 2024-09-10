@@ -78,8 +78,8 @@ report_mouse_t pointing_device_task_combined_user(report_mouse_t left_report, re
                 left_report.x = 0;
                 left_report.y = 0;
                 break;
-            case DRAG_PAN:     //set left cirque to horizontal/vertical scrolling only when held
-                left_report.h = left_report.x;
+            case DRAG_PAN:     //set left cirque to horizontal/vertical scrolling only when held (and reduce horizontal pan!)
+                left_report.h = left_report.x / 2;
                 left_report.v = left_report.y;
                 left_report.x = 0;
                 left_report.y = 0;

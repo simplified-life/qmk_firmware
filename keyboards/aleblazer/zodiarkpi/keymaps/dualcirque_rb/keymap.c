@@ -44,7 +44,7 @@ enum custom_keycodes {          // See below in process_record_user for purpose 
 void pointing_device_init_user(void) {
 //  set_auto_mouse_layer(<mouse_layer>); // only required if AUTO_MOUSE_DEFAULT_LAYER is not set to index of <mouse_layer>
     set_auto_mouse_enable(true);         // always required before the auto mouse feature will work
-    cirque_pinnacle_configure_cursor_glide(5); //motion of cursor continues when flicked
+//  cirque_pinnacle_configure_cursor_glide(5); //motion of cursor continues when flicked
 }
 /* Variable for Drag Scroll in cirque and global variable for passing keycode*/
 bool set_scrolling = false;
