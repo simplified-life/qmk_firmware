@@ -9,3 +9,4 @@ SPLIT_KEYBOARD = yes
 CAPS_WORD_ENABLE = yes
 SLEEP_LED_ENABLE = yes							# LEDs inactive when computer is sleeping
 DYNAMIC_MACRO_ENABLE = yes
+TAP_DANCE_ENABLE = yes

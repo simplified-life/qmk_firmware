@@ -59,6 +59,38 @@ bool cirque_precision_tg_off = false;
 #define CIRQUE_DPI_DEFAULT 1500 //used for cirque as mouse
 #define CIRQUE_DPI_PRECISION 400 //used for cirque to set in lower dpi in precision mode
 
+//Tap Dance Declarations
+
+enum td_keycodes {      // Tap dance enums
+    TD_ALT,    //LALT Key when held or tapped. Shift up layer when tap tap held.
+};
+typedef enum {
+    TD_NONE,
+    TD_UNKNOWN,
+    TD_SINGLE_TAP,
+    TD_SINGLE_HOLD,
+    TD_DOUBLE_TAP,
+    TD_DOUBLE_HOLD,
+    TD_DOUBLE_SINGLE_TAP, // Send two single taps
+} td_state_t;
+
+typedef struct {
+    bool is_press_action;
+    td_state_t state;
+} td_tap_t;
+
+// Create a global instance of the tapdance state type
+static td_state_t td_state;
+
+// Declare your tapdance functions:
+
+// Function to determine the current tapdance state
+td_state_t cur_dance(tap_dance_state_t *state);
+
+// `finished` and `reset` functions for each tapdance keycode
+void td_alt_finished(tap_dance_state_t *state, void *user_data);
+void td_alt_reset(tap_dance_state_t *state, void *user_data);
+
 /*Processing of user input for handling alternate actions*/
 bool process_record_user(uint16_t keycode, keyrecord_t * record) {
   switch (keycode) {
@@ -102,6 +134,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t * record) {
   return true;
 }
 
+
 /* INCLUDE FILES for enabled devices (needs to be included after above definitions)*/
 #ifdef OLED_ENABLE
 	#include "oled.c"
@@ -109,16 +142,19 @@ bool process_record_user(uint16_t keycode, keyrecord_t * record) {
 #ifdef POINTING_DEVICE_ENABLE
     #include "cirque.c"
 #endif
+#ifdef TAP_DANCE_ENABLE
+    #include "tapdance.c"
+#endif
 
 /* Layout Definitions for Different Layers */
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 //QWERTY / BASE
 	[0] = LAYOUT(
-      KC_ESC,   KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                                           KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS,
-      KC_TAB,   KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                                           KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC,
-      KC_CAPS,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,     KC_MINS, KC_MUTE,  RGB_TOG, KC_EQL,   KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
-      KC_SFTENT,KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,LT(1,KC_GRV), KC_BSLS,  KC_EQL,  TT(1),    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,
-      KC_LCTL,  KC_LCTL, KC_LBRC, KC_RBRC, KC_LGUI, KC_SPC,          LSG(KC_S),  LCA(KC_TAB),       KC_ENT,  KC_DEL,  KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
+      KC_ESC,     KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                                           KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS,
+      KC_TAB,     KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                                           KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC,
+      KC_CAPS,    KC_A,    KC_S,    KC_D,    KC_F,    KC_G,     KC_MINS, KC_MUTE,  RGB_TOG, KC_EQL,   KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
+      SC_SENT,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,LT(1,KC_GRV), KC_BSLS,  KC_EQL,  TT(1),    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,
+      KC_LCTL,TD(TD_ALT),  KC_LBRC, KC_RBRC, KC_LGUI, KC_SPC,          LSG(KC_S),  LCA(KC_TAB),       KC_ENT,  KC_DEL,  KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
     ),
 //NUMPAD
 	[1] = LAYOUT(
@@ -133,7 +169,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       _______, DM_REC1, DM_REC2, DM_PLY1, DM_PLY2, DM_RSTP,                                      _______,      _______,      _______, _______,_______, _______,
       _______, _______, _______, _______, KC_BTN3, KC_BTN1,                                      KC_BTN1,      KC_BTN2,      KC_NO,   KC_NO,  MS_PREC, _______,
       _______, _______,  DG_SCR, _______, KC_LCTL, KC_BTN2, _______, _______,   _______, _______,LALT(KC_LEFT),LALT(KC_RGHT),KC_NO,   KC_BTN3,KC_NO,   _______,
-      _______, _______, _______, _______, _______, DG_BRI,   DG_VOL, DG_RWFF,   _______,  TT(0),   KC_F5,      _______,      KC_NO,   KC_NO,  KC_NO,   _______,
+      _______, _______, _______, _______, _______, DG_BRI,   DG_VOL, DG_RWFF,   RGB_TOG,  TT(0),   KC_F5,      _______,      KC_NO,   KC_NO,  KC_NO,   _______,
       _______, _______, _______, _______, _______, DG_PAN,   DG_HOR,            TO(1),           _______,      _______,      _______, _______,_______, _______
       ),
 //SETTINGS

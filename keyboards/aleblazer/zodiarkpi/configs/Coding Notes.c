@@ -6,25 +6,6 @@
 //TAP DANCE KEYS consider some tap dance keys
 TAB through windows from a double tap.... caps lock hold for a double tap shift to caps a word or similar?
 //consider the ability to record custom macros using the settings layer or something so that when doing repetitive tasks the tasks can be automated
-ACTION_TAP_DANCE_DOUBLE(kc1, kc2)
-
-OSL(X) // switch to layer X for one keypress
-
-//TAP DANCE
-
-//Tap Dance Declarations
-enum {
-    TD_ALT = 0,
-    TD_TAB = 0
-};
-
-//Tap Dance Definitions
-qk_tap_dance_action_t tap_dance_actions[] = {
-  //Tap once for Alt, twice for layer switch
-  [TD_ALT]  = ACTION_TAP_DANCE_DOUBLE(KC_LALT, OSL(1)),
-  [TD_TAB]  = ACTION_TAP_DANCE_DOUBLE(KC_TAB, KC_LALT(TAB))
-};
-*/
 
 
 ///////////////////////////////////////////
