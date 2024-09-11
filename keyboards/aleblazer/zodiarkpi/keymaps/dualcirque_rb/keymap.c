@@ -130,7 +130,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       ),
 //MOUSE
 	[2] = LAYOUT(
-      _______, _______, _______, _______, _______, _______,                                      _______,      _______,      _______, _______,_______, _______,
+      _______, DM_REC1, DM_REC2, DM_PLY1, DM_PLY2, DM_RSTP,                                      _______,      _______,      _______, _______,_______, _______,
       _______, _______, _______, _______, KC_BTN3, KC_BTN1,                                      KC_BTN1,      KC_BTN2,      KC_NO,   KC_NO,  MS_PREC, _______,
       _______, _______,  DG_SCR, _______, KC_LCTL, KC_BTN2, _______, _______,   _______, _______,LALT(KC_LEFT),LALT(KC_RGHT),KC_NO,   KC_BTN3,KC_NO,   _______,
       _______, _______, _______, _______, _______, DG_BRI,   DG_VOL, DG_RWFF,   _______,  TT(0),   KC_F5,      _______,      KC_NO,   KC_NO,  KC_NO,   _______,
