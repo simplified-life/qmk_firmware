@@ -16,6 +16,9 @@
 #endif
 
 #define DYNAMIC_KEYMAP_LAYER_COUNT 5        //allow extra layers (total of 5 including the base)
+#define BOTH_SHIFTS_TURNS_ON_CAPS_WORD //CAPS WORD defined in rules.mk will finish capitalising when a word is finished
+#define DOUBLE_TAP_SHIFT_TURNS_ON_CAPS_WORD
+#define CAPS_WORD_IDLE_TIMEOUT 3000  // 3 seconds.
 
 //enable TT functions for keys to respond with two taps
 #define TAP_CODE_DELAY 10

@@ -28,17 +28,17 @@ enum layer_names {
 
 
 enum custom_keycodes {          // See below in process_record_user for purpose of custom keycode
-  DRAG_SCROLL = SAFE_RANGE,
-  SCR_SHOT,
-  W_SWTCH,
+  DG_SCR = SAFE_RANGE,
   AM_Togl,
-  DRAG_VOLUME,
-  DRAG_PAN,
-  DRAG_BRIGHTNESS,
-  DRAG_HORIZONTAL,
-  DRAG_RWFF,
-  MOUSE_PRECISION,
+  DG_VOL,
+  DG_PAN,
+  DG_BRI,
+  DG_HOR,
+  DG_RWFF,
+  MS_PREC,
 };
+
+
 
 /*Enable Auto Mouse */
 void pointing_device_init_user(void) {
@@ -56,18 +56,18 @@ uint16_t get_current_keycode(void) {
 bool auto_mouse_tg_off = false;
 /* Precision Mode for Cirque Mouse */
 bool cirque_precision_tg_off = false;
-#define CIRQUE_DPI_DEFAULT 2000 //used for cirque as mouse
+#define CIRQUE_DPI_DEFAULT 1500 //used for cirque as mouse
 #define CIRQUE_DPI_PRECISION 400 //used for cirque to set in lower dpi in precision mode
 
 /*Processing of user input for handling alternate actions*/
 bool process_record_user(uint16_t keycode, keyrecord_t * record) {
   switch (keycode) {
-     case DRAG_SCROLL: // Toggle set_scrolling when DRAG_SCROLL key is pressed or released
-     case DRAG_VOLUME:
-     case DRAG_PAN:
-     case DRAG_BRIGHTNESS:
-     case DRAG_HORIZONTAL:
-     case DRAG_RWFF:
+     case DG_SCR:           // Activate mouse DRAG_SCROLL while pressed
+     case DG_VOL:           // Activate cirque DRAG_VOLUME
+     case DG_PAN:           // Activate cirque DRAG_PAN (horizontal and vertical scroll)
+     case DG_BRI:           // Activate cirque DRAG_BRIGHTNESS
+     case DG_HOR:           // Activate cirque DRAG_HORIZONTAL
+     case DG_RWFF:          // Activate cirque DRAG_RWFF rewind/fast forward (not working well, uses horizontal motion)
          if(record->event.pressed) { // key down
          set_scrolling = record->event.pressed;
          current_keycode = keycode;
@@ -78,7 +78,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t * record) {
             }
          }
          break;
-     case MOUSE_PRECISION: //update DPI values for Cirque
+     case MS_PREC: //update DPI values for Cirque and toggle for more precision
             if(record->event.pressed) { // key down
                 if(cirque_precision_tg_off) {
                 pointing_device_set_cpi_on_side(false, CIRQUE_DPI_DEFAULT); //Set cpi on right side to a default value for mousing.
@@ -89,7 +89,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t * record) {
                 }
             } // do nothing on key up
         break;
-     case AM_Togl:     // toggle auto mouse enable key
+     case AM_Togl:      // toggle auto mouse enable key
             if(record->event.pressed) { // key down
                 auto_mouse_layer_off(); // disable target layer if needed
                 set_auto_mouse_enable((AUTO_MOUSE_ENABLED) ^ 1);
@@ -118,7 +118,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                                          KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC,
       KC_CAPS, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_MINS, KC_MUTE,  RGB_TOG, KC_EQL,   KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
       KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_GRV, KC_BSLS,   KC_EQL, TT(1),     KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,
-      KC_LCTL, KC_LALT, KC_LBRC, KC_RBRC, KC_LGUI, KC_SPC,  LGUI(LSFT(KC_S)),  LCTL(LALT(KC_TAB)),KC_ENT,  KC_DEL,  KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
+      KC_LCTL, KC_LCTL, KC_LBRC, KC_RBRC, KC_LGUI, KC_SPC,  LGUI(LSFT(KC_S)),  LCTL(LALT(KC_TAB)),KC_ENT,  KC_DEL,  KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
     ),
 //NUMPAD
 	[1] = LAYOUT(
@@ -130,16 +130,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       ),
 //MOUSE
 	[2] = LAYOUT(
-      _______, KC_F1, KC_F2,   KC_F3,   KC_F4,     KC_F5,                                                     KC_F6,            KC_F7,   KC_F8,  KC_F9,   KC_F10, KC_F11,
-      KC_PSLS, KC_P7, KC_P8,   KC_P9,   KC_BTN3,   KC_BTN1,                                                   KC_BTN1,          KC_BTN2, KC_NO,  KC_NO,   KC_NO,  _______,
-      KC_CAPS, KC_P4, KC_P5,   KC_P6,   KC_LCTL,   KC_BTN2, _______, _______,                _______, _______,MOUSE_PRECISION,   KC_NO,   KC_NO,  KC_BTN3, KC_NO,  KC_F12,
-      _______, KC_P1, KC_P2,   KC_P3,   _______,   DRAG_BRIGHTNESS, DRAG_VOLUME, DRAG_RWFF,  _______,  TT(0), _______,          _______, KC_NO,  KC_NO,   KC_NO,  _______,
-      _______, KC_P0, KC_PDOT, KC_PENT, _______,   DRAG_PAN, DRAG_HORIZONTAL,                TO(1),           _______,          _______, _______,_______, _______,_______
+      _______, _______, _______, _______, _______, _______,                                      _______,      _______,      _______, _______,_______, _______,
+      _______, _______, _______, _______, KC_BTN3, KC_BTN1,                                      KC_BTN1,      KC_BTN2,      KC_NO,   KC_NO,  MS_PREC, _______,
+      _______, _______,  DG_SCR, _______, KC_LCTL, KC_BTN2, _______, _______,   _______, _______,LALT(KC_LEFT),LALT(KC_RGHT),KC_NO,   KC_BTN3,KC_NO,   _______,
+      _______, _______, _______, _______, _______, DG_BRI,   DG_VOL, DG_RWFF,   _______,  TT(0),   KC_F5,      _______,      KC_NO,   KC_NO,  KC_NO,   _______,
+      _______, _______, _______, _______, _______, DG_PAN,   DG_HOR,            TO(1),           _______,      _______,      _______, _______,_______, _______
       ),
 //SETTINGS
 	[3] = LAYOUT(
-      QK_BOOT, TO(0),   TO(1),   TO(2),   TO(3),   TO(4),                                         _______, _______, _______, _______, _______, QK_BOOT,
-      AM_Togl, _______, _______, _______, _______, _______,                                       _______, _______, _______, _______, _______, _______,
+      QK_BOOT,   TO(0),   TO(1),   TO(2),   TO(3),   TO(4),                                       _______, _______, _______, _______, _______, QK_BOOT,
+      AM_Togl,   DF(0),   DF(1),   DF(2),   DF(3),   DF(4),                                       _______, _______, _______, _______, _______, _______,
       EE_CLR,  _______, _______, _______, _______, _______, _______, _______, _______, _______,   _______, _______, _______, _______, _______, _______,
       _______, _______, _______, _______, _______, _______, _______, _______, _______, TT(0),     RGB_TOG, RGB_MOD, RGB_SPI, RGB_HUI, RGB_SAI, RGB_VAI,
       _______, _______, _______, _______, _______, _______,            TO(2),  TO(1),             _______, RGB_RMOD,RGB_SPD, RGB_HUD, RGB_SAD, RGB_VAD

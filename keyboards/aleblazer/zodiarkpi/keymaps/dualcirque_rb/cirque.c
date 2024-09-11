@@ -68,7 +68,7 @@ void repeat_key(uint8_t times, int8_t report, uint8_t delay, const char scroll_a
 report_mouse_t pointing_device_task_combined_user(report_mouse_t left_report, report_mouse_t right_report) {
   //  if (set_scrolling) {
         switch (current_keycode) {
-            case DRAG_VOLUME:       //set left cirque to volume vertical scrolling when held
+            case DG_VOL:       //set left cirque to volume vertical scrolling when held
                 scroll_accumulatedCB_v += (float)left_report.y / CIRQUE_SCROLL_SUPER; //accumulate based on divisors
                 REPEAT_KEY_CODE = (int8_t)scroll_accumulatedCB_v; //assign integer
                 scroll_accumulatedCB_v -= (int8_t)scroll_accumulatedCB_v; //update number
@@ -78,13 +78,13 @@ report_mouse_t pointing_device_task_combined_user(report_mouse_t left_report, re
                 left_report.x = 0;
                 left_report.y = 0;
                 break;
-            case DRAG_PAN:     //set left cirque to horizontal/vertical scrolling only when held (and reduce horizontal pan!)
+            case DG_PAN:     //set left cirque to horizontal/vertical scrolling only when held (and reduce horizontal pan!)
                 left_report.h = left_report.x / 2;
                 left_report.v = left_report.y;
                 left_report.x = 0;
                 left_report.y = 0;
                 break;
-            case DRAG_BRIGHTNESS:   //set left cirque to screen brightness vertical scrolling when held
+            case DG_BRI:   //set left cirque to screen brightness vertical scrolling when held
                 scroll_accumulatedCB_v += (float)left_report.y / CIRQUE_SCROLL_SUPER; //accumulate based on divisors
                 REPEAT_KEY_CODE = (int8_t)scroll_accumulatedCB_v; //assign integer
                 scroll_accumulatedCB_v -= (int8_t)scroll_accumulatedCB_v; //update number
@@ -94,13 +94,13 @@ report_mouse_t pointing_device_task_combined_user(report_mouse_t left_report, re
                 left_report.x = 0;
                 left_report.y = 0;
                 break;
-            case DRAG_HORIZONTAL:   //set left cirque to horizontal scrolling only when held
+            case DG_HOR:   //set left cirque to horizontal scrolling only when held
                 left_report.h = left_report.x;
                 left_report.v = 0;
                 left_report.x = 0;
                 left_report.y = 0;
                 break;
-            case DRAG_RWFF:         //set left cirque to Rewind/Fast Forward with horizontal scrolling when held (not working well)
+            case DG_RWFF:         //set left cirque to Rewind/Fast Forward with horizontal scrolling when held (not working well)
                 scroll_accumulatedCB_h += (float)left_report.x / CIRQUE_SCROLL_PRECISION; //accumulate based on divisors
                 REPEAT_KEY_CODE = (int8_t)scroll_accumulatedCB_h; //assign integer
                 scroll_accumulatedCB_h -= (int8_t)scroll_accumulatedCB_h; //update number
