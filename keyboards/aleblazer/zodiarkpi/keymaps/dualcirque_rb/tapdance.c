@@ -124,6 +124,6 @@ tap_dance_action_t tap_dance_actions[] = {
     [TD_ALTF4] = ACTION_TAP_DANCE_DOUBLE(KC_4, A(KC_F4)),
     [TD_ESC] = ACTION_TAP_DANCE_DOUBLE(KC_ESC, C(A(KC_DEL))),
     [TD_BSPC] = ACTION_TAP_DANCE_DOUBLE(KC_BSPC, C(KC_BSPC)),
-    [TD_TAB] = ACTION_TAP_DANCE_DOUBLE(KC_TAB, LSG(KC_S)),
+    [TD_TAB] = ACTION_TAP_DANCE_DOUBLE(KC_TAB, LCA(KC_TAB)),
 //  [TD_ALT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_alt_finished, td_alt_reset)
 };
