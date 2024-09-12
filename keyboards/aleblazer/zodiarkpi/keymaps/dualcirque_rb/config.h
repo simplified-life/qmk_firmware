@@ -42,19 +42,28 @@
     #define OLED_COLUMN_OFFSET 2            //Shift output to the right this many pixels. Useful for 128x64 displays centered on a 132x64 SH1106 IC.
 #endif
 
-/* RGB Sleep Function*/
-#define RGBLIGHT_SLEEP
-#define RGB_MATRIX_SLEEP // turn off effects when suspended
-#define RGBLIGHT_TIMEOUT 300000  // ms to wait until rgblight time out, 900K ms is 15min.
-#define RGB_MATRIX_TIMEOUT 300000 // number of milliseconds to wait until rgb automatically turns off
+#ifdef RGB_MATRIX_ENABLE
+/*RGB Default after EPPROM Reset*/
+    #define RGB_MATRIX_DEFAULT_MODE RGB_MATRIX_BREATHING
+    #define RGB_MATRIX_DEFAULT_HUE 230
+    #define RGB_MATRIX_DEFAULT_SAT 215
+    #define RGB_MATRIX_DEFAULT_VAL 255
+    #define RGB_MATRIX_EFFECT_BREATHING_SPEED 2
+    #define RGB_MATRIX_DEFAULT_BRIGHTNESS 150
 
-/* Extra Effects RGB Matrix (still confirming why some are not being activate)*/
-#define ENABLE_RGB_MATRIX_FLOWER_BLOOMING
-#define ENABLE_RGB_MATRIX_STARLIGHT_DUAL_HUE
-#define ENABLE_RGB_MATRIX_STARLIGHT_DUAL_SAT
-#define ENABLE_RGB_MATRIX_RIVERFLOW
-#define RGB_MATRIX_TYPING_HEATMAP_DECREASE_DELAY_MS 50
-#define RGB_MATRIX_TYPING_HEATMAP_SPREAD 40
-#define RGB_MATRIX_TYPING_HEATMAP_AREA_LIMIT 16
-#define RGB_MATRIX_SOLID_REACTIVE_GRADIENT_MODE
+    /* RGB Sleep Function*/
+    #define RGBLIGHT_SLEEP
+    #define RGB_MATRIX_SLEEP // turn off effects when suspended
+    #define RGBLIGHT_TIMEOUT 300000  // ms to wait until rgblight time out, 900K ms is 15min.
+    #define RGB_MATRIX_TIMEOUT 300000 // number of milliseconds to wait until rgb automatically turns off
 
+    /* Extra Effects RGB Matrix (still confirming why some are not being activate)*/
+    #define ENABLE_RGB_MATRIX_FLOWER_BLOOMING
+    #define ENABLE_RGB_MATRIX_STARLIGHT_DUAL_HUE
+    #define ENABLE_RGB_MATRIX_STARLIGHT_DUAL_SAT
+    #define ENABLE_RGB_MATRIX_RIVERFLOW
+    #define RGB_MATRIX_TYPING_HEATMAP_DECREASE_DELAY_MS 50
+    #define RGB_MATRIX_TYPING_HEATMAP_SPREAD 40
+    #define RGB_MATRIX_TYPING_HEATMAP_AREA_LIMIT 16
+    #define RGB_MATRIX_SOLID_REACTIVE_GRADIENT_MODE
+#endif
