@@ -62,7 +62,9 @@ bool cirque_precision_tg_off = false;
 //Tap Dance Declarations
 
 enum td_keycodes {      // Tap dance enums
-    TD_ALT,    //LALT Key when held or tapped. Shift up layer when tap tap held.
+    TD_ALT,     //LALT Key when held or tapped. Shift up layer when ALT is tap tap held.
+    TD_BSPC,    //BSPC Key when tapped, Ctrl+BSPC when held to delete whole words at a time
+    TD_ESC,     //ESC Key when tapped, Ctrl+Alt+Delete when held
 };
 typedef enum {
     TD_NONE,
@@ -150,8 +152,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t * record) {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 //QWERTY / BASE
 	[0] = LAYOUT(
-      KC_ESC,     KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                                           KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS,
-      KC_TAB,     KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                                           KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC,
+      TD(TD_ESC), KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                                           KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS,
+      KC_TAB,     KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                                           KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    TD(TD_BSPC),
       KC_CAPS,    KC_A,    KC_S,    KC_D,    KC_F,    KC_G,     KC_MINS, KC_MUTE,  RGB_TOG, KC_EQL,   KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
       SC_SENT,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,LT(1,KC_GRV), KC_BSLS,  KC_EQL,  TT(1),    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,
       KC_LCTL,TD(TD_ALT),  KC_LBRC, KC_RBRC, KC_LGUI, KC_SPC,          LSG(KC_S),  LCA(KC_TAB),       KC_ENT,  KC_DEL,  KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
