@@ -1,6 +1,51 @@
 //. Example 5: Using tap dance for advanced mod-tap and layer-tap keys
 //  https://docs.qmk.fm/features/tap_dance#example-5
 
+//TO BE INCLUDED IN THE KEYMAP.C ABOVE THE LAYOUT
+/*
+//Tap Dance Declarations
+
+enum td_keycodes {      // Tap dance enums
+    TD_ALT,     //LALT Key when held or tapped. Shift up layer when ALT is tap tap held.
+    TD_BSPC,    //BSPC Key when tapped, Ctrl+BSPC when held to delete whole words at a time
+    TD_ESC,     //ESC Key when tapped, Ctrl+Alt+Delete when held
+};
+typedef enum {
+    TD_NONE,
+    TD_UNKNOWN,
+    TD_SINGLE_TAP,
+    TD_SINGLE_HOLD,
+    TD_DOUBLE_TAP,
+    TD_DOUBLE_HOLD,
+    TD_DOUBLE_SINGLE_TAP, // Send two single taps
+} td_state_t;
+
+typedef struct {
+    bool is_press_action;
+    td_state_t state;
+} td_tap_t;
+
+// Create a global instance of the tapdance state type
+static td_state_t td_state;
+
+// Declare your tapdance functions:
+
+// Function to determine the current tapdance state
+td_state_t cur_dance(tap_dance_state_t *state);
+
+// `finished` and `reset` functions for each tapdance keycode
+void td_alt_finished(tap_dance_state_t *state, void *user_data);
+void td_alt_reset(tap_dance_state_t *state, void *user_data);
+*/
+
+
+//TO BE INCLUDED AS A FILE WITH THE FOLLOWING ENTRY IN KEYMAP.C
+/*
+#ifdef TAP_DANCE_ENABLE
+    #include "tapdance.c"
+#endif
+*/
+
 /*Tap dance can be used to emulate MT() and LT() behavior when the tapped code is not a basic keycode. This is useful to send tapped keycodes that normally require Shift, such as parentheses or curly braces—or other modified keycodes, such as Control + X.
 Below your layers and custom keycodes, add the following:
 Wrap each tapdance keycode in TD() when including it in your keymap, e.g. TD(ALT_LP)*/
@@ -76,7 +121,9 @@ void td_alt_reset(tap_dance_state_t *state, void *user_data) {
 
 // Define `ACTION_TAP_DANCE_FN_ADVANCED()` for each tapdance keycode, passing in `finished` and `reset` functions
 tap_dance_action_t tap_dance_actions[] = {
-    [TD_ALT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_alt_finished, td_alt_reset),
+    [TD_ALTF4] = ACTION_TAP_DANCE_DOUBLE(KC_4, A(KC_F4))),
     [TD_ESC] = ACTION_TAP_DANCE_DOUBLE(KC_ESC, C(A(KC_DEL))),
     [TD_BSPC] = ACTION_TAP_DANCE_DOUBLE(KC_BSPC, C(KC_BSPC)),
+    [TD_TAB] = ACTION_TAP_DANCE_DOUBLE(KC_BSPC, C(KC_BSPC)),
+//  [TD_ALT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_alt_finished, td_alt_reset)
 };

@@ -62,36 +62,11 @@ bool cirque_precision_tg_off = false;
 //Tap Dance Declarations
 
 enum td_keycodes {      // Tap dance enums
-    TD_ALT,     //LALT Key when held or tapped. Shift up layer when ALT is tap tap held.
-    TD_BSPC,    //BSPC Key when tapped, Ctrl+BSPC when held to delete whole words at a time
-    TD_ESC,     //ESC Key when tapped, Ctrl+Alt+Delete when held
+    TD_ALTF4,     // 4 Key when held or tapped. Alt F4 when double tapped or tapped and held.
+    TD_BSPC,    //BSPC Key when tapped, Ctrl+BSPC when double tapped (or tap tap held) to delete whole words at a time
+    TD_ESC,     //ESC Key when tapped, Ctrl+Alt+Delete when double tapped
+    TD_TAB,     //TAB Key when tapped, Alt TAB when double tapped
 };
-typedef enum {
-    TD_NONE,
-    TD_UNKNOWN,
-    TD_SINGLE_TAP,
-    TD_SINGLE_HOLD,
-    TD_DOUBLE_TAP,
-    TD_DOUBLE_HOLD,
-    TD_DOUBLE_SINGLE_TAP, // Send two single taps
-} td_state_t;
-
-typedef struct {
-    bool is_press_action;
-    td_state_t state;
-} td_tap_t;
-
-// Create a global instance of the tapdance state type
-static td_state_t td_state;
-
-// Declare your tapdance functions:
-
-// Function to determine the current tapdance state
-td_state_t cur_dance(tap_dance_state_t *state);
-
-// `finished` and `reset` functions for each tapdance keycode
-void td_alt_finished(tap_dance_state_t *state, void *user_data);
-void td_alt_reset(tap_dance_state_t *state, void *user_data);
 
 /*Processing of user input for handling alternate actions*/
 bool process_record_user(uint16_t keycode, keyrecord_t * record) {
@@ -144,19 +119,16 @@ bool process_record_user(uint16_t keycode, keyrecord_t * record) {
 #ifdef POINTING_DEVICE_ENABLE
     #include "cirque.c"
 #endif
-#ifdef TAP_DANCE_ENABLE
-    #include "tapdance.c"
-#endif
 
 /* Layout Definitions for Different Layers */
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 //QWERTY / BASE
 	[0] = LAYOUT(
-      TD(TD_ESC), KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                                           KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS,
-      KC_TAB,     KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                                           KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    TD(TD_BSPC),
+      TD(TD_ESC), KC_1,    KC_2,    KC_3,TD(TD_ALTF4),KC_5,                                           KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS,
+      TD(TD_TAB), KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                                           KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    TD(TD_BSPC),
       KC_CAPS,    KC_A,    KC_S,    KC_D,    KC_F,    KC_G,     KC_MINS, KC_MUTE,  RGB_TOG, KC_EQL,   KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
       SC_SENT,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,LT(1,KC_GRV), KC_BSLS,  KC_EQL,  TT(1),    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,
-      KC_LCTL,TD(TD_ALT),  KC_LBRC, KC_RBRC, KC_LGUI, KC_SPC,          LSG(KC_S),  LCA(KC_TAB),       KC_ENT,  KC_DEL,  KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
+      KC_LCTL, KC_LALT, KC_LBRC, KC_RBRC, KC_LGUI,  KC_SPC,            LSG(KC_S),  LCA(KC_TAB),       KC_ENT,  KC_DEL,  KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
     ),
 //NUMPAD
 	[1] = LAYOUT(
@@ -197,3 +169,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /* REFERENCE (not programming guide) Custom Keycodes Particularly for Macros*/
 //MACRO 1 SCREEN_SHOT = {KC_LCTL,KC_LALT,KC_TAB}
 //MACRO 2 WINDOW_SWITCH = {KC_LGUI,KC_LSFT,KC_S}
+
+// Define `ACTION_TAP_DANCE_FN_ADVANCED()` for each tapdance keycode, passing in `finished` and `reset` functions
+tap_dance_action_t tap_dance_actions[] = {
+    [TD_ALTF4] = ACTION_TAP_DANCE_DOUBLE(KC_4, A(KC_F4)),
+    [TD_ESC] = ACTION_TAP_DANCE_DOUBLE(KC_ESC, C(A(KC_DEL))),
+    [TD_BSPC] = ACTION_TAP_DANCE_DOUBLE(KC_BSPC, C(KC_BSPC)),
+    [TD_TAB] = ACTION_TAP_DANCE_DOUBLE(KC_TAB, A(KC_TAB)),
+//  [TD_ALT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_alt_finished, td_alt_reset) - requires advanced tapdance.c file
+};
