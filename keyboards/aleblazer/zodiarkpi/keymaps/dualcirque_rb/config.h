@@ -23,7 +23,7 @@
 //enable TT functions for keys to respond with two taps
 #define TAP_CODE_DELAY 10
 #define TAPPING_TOGGLE 2 //Tap TT twice to toggle layer
-#define TAPPING_TERM 175 //Tapping duration in ms, normally using 140
+#define TAPPING_TERM 140 //Tapping duration in ms, normally using 140
 
 // included line in rules.mk SPLIT_KEYBOARD = yes
 #define SPLIT_LAYER_STATE_ENABLE        //sync layer state
