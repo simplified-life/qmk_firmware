@@ -2,53 +2,12 @@
   "name":"Zodiark",
   "vendorId":"0xF901",
   "productId":"0xFF02",
-  "lighting": "qmk_rgblight",
+  "menus": [ "qmk_rgblight" ],
+  "keycodes": [ "qmk_lighting" ],
   "matrix": { "rows": 10, "cols": 8 },
-  "customKeycodes": [
-    {
-      "name": "Super Alt Tab FWD",
-      "title": "Alt Tab Forwards in Windows",
-      "shortName": "ATABF"
-    },
-    {
-      "name": "Super Alt Tab REV",
-      "title": "Alt Tab Reverse in Windows",
-      "shortName": "ATABR"
-    },
-    {
-      "name": "Move Window Right",
-      "title": "Move Window Right in Windows",
-      "shortName": "MWR"
-    },
-    {
-      "name": "Move Window Left",
-      "title": "Move Window Left in Windows",
-      "shortName": "MWL"
-    },
-    {
-      "name": "Shift-BSPC",
-      "title": "Shift-Backspace to Delete Whole Words",
-      "shortName": "SBS"
-    },
-    {
-      "name": "Trackball Scroll",
-      "title": "Pimoroni Trackball Scroll Mode",
-      "shortName": "PM_SCROLL"
-    },
-    {
-      "name": "Trackball Precision",
-      "title": "Pimoroni Trackball Precision Mode",
-      "shortName": "PM_PRECISION"
-    },
-    {
-      "name": "D2 Hunter Skate",
-      "title": "Destiny 2 Hunter Sword Skate",
-      "shortName": "D2SKATE"
-    }
-  ],
-  "layouts": 
+  "layouts":
   {
-    "keymap": 
+    "keymap":
 	 [
 		[{"y":1,"x":3},"0,3",{"x":11},"5,3"],
 		[{"y":-0.87,"x":2},"0,2",{"x":1},"0,4",{"x":9},"5,4",{"x":1},"5,2"],
@@ -71,11 +30,9 @@
 		[{"y":-0.53,"x":3},"4,3",{"x":11},"9,3"],
 		[{"y":-0.87,"x":2},"4,2",{"x":1},"4,4",{"x":9},"9,4",{"x":1},"9,2"],
 		[{"y":-0.6},"4,0","4,1",{"x":15},"9,1","9,0"],
-		[{"r":30,"rx":6.5,"ry":4.25,"y":-0.6,"x":0.8,"c":"#aaaaaa"},"3,7","4,7"],
-		[{"r":30,"rx":6.5,"ry":4.25,"y":0.6,"x":0.17,"c":"#777777"},"2,6","3,6"],
+		[{"r":30,"rx":6.5,"ry":4.25,"y":0.6,"x":0.17,"c":"#aaaaaa"},"2,6","3,6\n\n\n\n\n\n\n\n\ne0"],
 		[{"x":-0.33,"w":1.5},"4,5","4,6"],
-		[{"r":-30,"rx":13,"y":-0.8,"x":-3.2,"c":"#aaaaaa"},"8,7","9,7"],
-		[{"r":-30,"rx":13,"y":0.35,"x":-2.6,"c":"#777777"},"8,6","7,6"],
+		[{"r":-30,"rx":13,"y":0.35,"x":-2.6},"8,6\n\n\n\n\n\n\n\n\ne1","7,6"],
 		[{"x":-2.6},"9,6",{"w":1.5},"9,5"]
 	 ]
   }

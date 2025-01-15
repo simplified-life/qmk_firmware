@@ -26,12 +26,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #undef MATRIX_COLS
 #undef MATRIX_ROW_PINS
 #undef MATRIX_COL_PINS
-#undef ENCODER_RESOLUTION
 #define MATRIX_ROWS 10
 #define MATRIX_COLS 8 //Added extra column for rotary encoder VIA mapping.
 #define MATRIX_ROW_PINS { C6, D7, E6, B4, F4 }
 #define MATRIX_COL_PINS { F5, F6, F7, B1, B3, B2, B6, NO_PIN } //A virtual pin is needed for the encoder key matrix in via.
+
+#undef ENCODER_RESOLUTION
 #define ENCODER_RESOLUTION 4 //Reduce encoder double-input issue.
+#define ENCODER_DIRECTION_FLIP
 
 #undef DEBOUNCE
 #define DEBOUNCE 6 //Default is 5
@@ -44,36 +46,41 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Disabled to save space
 #define NO_ACTION_MACRO
 #define NO_ACTION_FUNCTION
-#define NO_ACTION_ONESHOT		//Save 244 bytes (-244).
-#define NO_RESET				//Save 40 bytes (-40).
-#define LAYER_STATE_8BIT		//For less than 8 bits worth of layers.
-#undef LOCKING_SUPPORT_ENABLE	//For MX lock keys only.
-#undef LOCKING_RESYNC_ENABLE	//For MX lock keys only.
+#define NO_ACTION_ONESHOT		//Save space (-244).
+#define NO_RESET				//Save space (-40).
+#define LAYER_STATE_8BIT		//Save space, 5 layers.
+
 
 #ifdef OLED_ENABLE
-	//#define OLED_DISPLAY_128X64		//Using 128x32 0.96" OLEDs
+	#define OLED_DISPLAY_128X64
 	#define OLED_TIMEOUT 80000			//80000 = 80secs, 120000 = 2mins in ms.
 	#define SPLIT_OLED_ENABLE			//Synx on/off OLED state between halves (+100).
 	#define OLED_LOGO					//Enable to print snakey custom logo on slave side (+108).
 #endif
 
 #ifdef RGBLIGHT_ENABLE
-	//#undef RGBLIGHT_ANIMATIONS // Very memory intensive (+2604)
-	//#define RGBLIGHT_EFFECT_STATIC_GRADIENT //Preferred RGB effect (+262)
-	//#define RGBLIGHT_EFFECT_SNAKE //For testing LED order
+	#undef RGBLIGHT_ANIMATIONS // Very memory intensive (+2604)
+	#undef RGBLIGHT_EFFECT_BREATHING
+	#undef RGBLIGHT_EFFECT_RAINBOW_MOOD
+	#undef RGBLIGHT_EFFECT_RAINBOW_SWIRL
+	#undef RGBLIGHT_EFFECT_SNAKE
+	#undef RGBLIGHT_EFFECT_KNIGHT
+	#undef RGBLIGHT_EFFECT_CHRISTMAS
+	#undef RGBLIGHT_EFFECT_RGB_TEST
+	#undef RGBLIGHT_EFFECT_ALTERNATING
+	#undef RGBLIGHT_EFFECT_TWINKLE
+	#define RGBLIGHT_EFFECT_STATIC_GRADIENT //Preferred RGB effect (+262)
 	#define RGBLIGHT_SLEEP //Turn off LEDs when computer sleeping (+72)
 #endif
 
 // Pimoroni trackball settings
 #ifdef POINTING_DEVICE_ENABLE
-	//#define PIMORONI_TRACKBALL_INTERVAL_MS 6 //Default is 8ms
 	#define POINTING_DEVICE_ROTATION_90
-	#define PIMORONI_TRACKBALL_INVERT_Y
-	#define PIMORONI_TRACKBALL_INVERT_X
+	#define POINTING_DEVICE_INVERT_X
+	#define POINTING_DEVICE_INVERT_Y
+	#define MOUSE_EXTENDED_REPORT
 #endif      
 
 #ifdef VIA_ENABLE
 	#define DYNAMIC_KEYMAP_LAYER_COUNT 5
 #endif
-
-#define D2SKATE_MACRO_ENABLE	//Enable Destiny 2 hunter skate macro (+224)

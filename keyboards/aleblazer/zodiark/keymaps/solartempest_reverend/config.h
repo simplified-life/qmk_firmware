@@ -66,6 +66,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     #define RGBLIGHT_EFFECT_BREATHE_MAX 150 //Maximum brightness in breathing mode
 	//#define RGBLIGHT_EFFECT_SNAKE //For testing LED order
    // #define RGBLIGHT_SPLIT //enable split synchronisation of effects
+    #undef RGBLIGHT_EFFECT_TWINKLE
+    #undef RGBLIGHT_EFFECT_CHRISTMAS
+    #undef RGBLIGHT_EFFECT_RAINBOW_MOOD
+    #undef RGBLIGHT_EFFECT_ALTERNATING
+    #undef RGBLIGHT_EFFECT_SNAKE
+    #undef RGBLIGHT_EFFECT_KNIGHT
 	#define RGBLIGHT_SLEEP //Turn off LEDs when computer sleeping (+72)
     // #define SPLIT_LAYER_STATE_ENABLE //sync of Host LED staus (caps lock, num lock...)
 #endif
@@ -81,5 +87,3 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifdef VIA_ENABLE
 	#define DYNAMIC_KEYMAP_LAYER_COUNT 5
 #endif
-
-#define D2SKATE_MACRO_ENABLE	//Enable Destiny 2 hunter skate macro (+224)

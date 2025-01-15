@@ -14,10 +14,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include QMK_KEYBOARD_H
 #ifdef OLED_ENABLE
-	//#include "snake_photo.c"
-	#include "oled.c"
+	#include "snake_octi.c"
 #endif
-#include "encoder.c"
 
 #ifdef POINTING_DEVICE_ENABLE
 	bool trackball_is_scrolling = true;		//Default mode is scrolling
@@ -34,116 +32,81 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #endif
 
 //Variables for custom keycodes
-#ifdef SUPER_ALT_TAB_ENABLE
-	bool is_alt_tab_active = false; // Super Alt Tab Code
-	uint16_t alt_tab_timer = 0;
-#endif
 bool lshift_held = false;	// LShift Backspace Delete whole Word Code
 bool rshift_held = false;	// RShift Backspace Delete whole Word Code
 static uint16_t held_shift = 0;
 
-#ifdef D2SKATE_MACRO_ENABLE
-	uint16_t D2SKATE_TIMER = 0;
-	bool D2SKATE_skated = false;	//Has skated
-	bool D2SKATE_reset = true;	//Has skated
-#endif
+enum custom_keycodes { //Use USER 00 instead of SAFE_RANGE for Via. VIA json must include the custom keycode.
+  SBS = QK_KB_0, 				//Shift backspace to delete whole word (Swap KC_BPSC with this)
+  PM_SCROLL,		//Toggle trackball scrolling mode
+  PM_PRECISION		//Toggle trackball precision mode
+};
 
-#ifdef VIA_ENABLE
-	enum custom_keycodes { //Use USER 00 instead of SAFE_RANGE for Via. VIA json must include the custom keycode.
-	  ATABF = USER00, 	//Alt tab forwards
-	  ATABR, 			//Alt tab reverse
-	  NMR, 				//Move window to monitor on right
-	  NML, 				//Move window to monitor on left
-	  SBS, 				//Shift backspace to delete whole word (Swap KC_BPSC with this)
-      PM_SCROLL,		//Toggle trackball scrolling mode
-      PM_PRECISION,		//Toggle trackball precision mode
-	  D2SKATE			//Destiny 2 hunter sword skate
-	};
-#else
-	enum custom_keycodes { //Use USER 00 instead of SAFE_RANGE for Via. VIA json must include the custom keycode.
-	  ATABF = SAFE_RANGE, //Alt tab forwards
-	  ATABR, 			//Alt tab reverse
-	  NMR, 				//Move window to monitor on right
-	  NML, 				//Move window to monitor on left
-	  SBS,				//Shift backspace to delete whole word (Swap KC_BPSC with this)
-      PM_SCROLL,		//Toggle trackball scrolling mode
-      PM_PRECISION,		//Toggle trackball precision mode
-	  D2SKATE			//Destiny 2 hunter sword skate
-	};
-#endif
-
-#ifdef VIA_ENABLE
-	// Extra keys are added for rotary encoder support in VIA
-	#define LAYOUT_via( \
-		 L00, L01, L02, L03, L04, L05,                               R05, R04, R03, R02, R01, R00, \
-		 L10, L11, L12, L13, L14, L15, L06,                     R06, R15, R14, R13, R12, R11, R10, \
-		 L20, L21, L22, L23, L24, L25, L16,                     R16, R25, R24, R23, R22, R21, R20, \
-		 L30, L31, L32, L33, L34, L35, L26, L36, L37, R37, R36, R26, R35, R34, R33, R32, R31, R30, \
-		 L40, L41, L42, L43, L44,    L45,   L46, L47, R47, R46,   R45,    R44, R43, R42, R41, R40  \
-		  ) \
-		  { \
-		 { L00,   L01,   L02,   L03,   L04,   L05,   L06,   KC_NO }, \
-		 { L10,   L11,   L12,   L13,   L14,   L15,   L16,   KC_NO }, \
-		 { L20,   L21,   L22,   L23,   L24,   L25,   L26,   KC_NO }, \
-		 { L30,   L31,   L32,   L33,   L34,   L35,   L36,   L37   }, \
-		 { L40,   L41,   L42,   L43,   L44,   L45,   L46,   L47   }, \
-		 { R00,   R01,   R02,   R03,   R04,   R05,   R06,   KC_NO }, \
-		 { R10,   R11,   R12,   R13,   R14,   R15,   R16,   KC_NO }, \
-		 { R20,   R21,   R22,   R23,   R24,   R25,   R26,   KC_NO }, \
-		 { R30,   R31,   R32,   R33,   R34,   R35,   R36,   R37   }, \
-		 { R40,   R41,   R42,   R43,   R44,   R45,   R46,   R47   }  \
-		}
-#endif
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-#ifndef VIA_ENABLE //This will bypass the layout when VIA is enabled to save space. Requires loading layout in VIA otherwise random keys may be occur.
 	[0] = LAYOUT(
-	  KC_ESC,  KC_1,    KC_2,    KC_3,   KC_4,  KC_5,                                                         KC_6,   KC_7,    KC_8,    KC_9,    KC_0,    KC_BSPC,
-	  KC_TAB,  KC_Q,    KC_W,    KC_E,   KC_R,  KC_T,  KC_LBRC,                                      KC_RBRC, KC_Y,   KC_U,    KC_I,    KC_O,    KC_P,    KC_BSLS,
-	  MO(3),   KC_A,    KC_S,    KC_D,   KC_F,  KC_G,  KC_MINS,                                      KC_EQL,  KC_H,   KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
-	  KC_LSFT, KC_Z,    KC_X,    KC_C,   KC_V,  KC_B,  KC_GRV,  KC_MUTE, _______, _______, RGB_TOG,  KC_DEL,  KC_N,   KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_ENT,
-	  KC_LCTL, KC_LALT, KC_LGUI, KC_APP, MO(1),    KC_SPC,      KC_ENT,  _______, _______, KC_ENT,       KC_SPC,       MO(2),  KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
-	  ),
+      KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                                           KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_BSPC,
+      KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,  KC_LBRC,                       KC_RBRC,  KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSLS,
+      MO(3),   KC_A,    KC_S,    KC_D,    KC_F,    KC_G,  KC_MINS,                        KC_EQL,  KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
+      KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,  KC_GRV, KC_MUTE,      RGB_TOG, KC_DEL,KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_ENT ,
+      KC_LCTL, KC_LALT, KC_LGUI, KC_APP, MO(1),       KC_SPC,   KC_ENT,           KC_ENT,   KC_SPC,  MO(2),    KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
+    ),
 		
 	[1] = LAYOUT(
-	  _______, KC_F1, KC_F2,   KC_F3,   KC_F4,   KC_F5,                                                             KC_F6,   KC_F7,   KC_F8, KC_F9,   KC_F10,  KC_F11,
-	  KC_PSLS, KC_P7, KC_P8,   KC_P9,   KC_NLCK, _______, _______,                                         _______, _______, KC_PSLS, KC_P7, KC_P8,   KC_P9,   KC_F12,
-	  KC_CAPS, KC_P4, KC_P5,   KC_P6,   KC_NLCK, _______, _______,                                         _______, _______, _______, KC_P4, KC_P5,   KC_P6,   KC_NLCK,
-	  _______, KC_P1, KC_P2,   KC_P3,   _______, _______, _______, _______,  _______,  _______,  _______,  _______, _______, _______, KC_P1, KC_P2,   KC_P3,   _______,
-	  _______, KC_P0, KC_PDOT, KC_PENT, _______,      _______,     _______,  _______,  _______,  _______,  _______,    _______,       KC_P0, KC_PDOT, KC_PENT, _______
-	  ),
+      _______, KC_F1, KC_F2, KC_F3, KC_F4,   KC_F5,                                KC_F6,   KC_F7,   KC_F8, KC_F9, KC_F10, KC_F11,
+      KC_PSLS, KC_P7, KC_P8, KC_P9, KC_NUM,  _______, _______,                   _______, _______, KC_PSLS, KC_P7, KC_P8, KC_P9, KC_F12,
+      KC_CAPS, KC_P4, KC_P5, KC_P6, KC_NUM,  _______, _______,                   _______, _______, _______, KC_P4, KC_P5, KC_P6, KC_NUM,
+      _______, KC_P1, KC_P2, KC_P3, _______, _______, _______, _______,  _______, _______, _______, _______, KC_P1, KC_P2, KC_P3, _______,
+      _______, KC_P0, KC_PDOT, KC_PENT, _______,     _______,  _______,   _______,    _______,   _______, KC_P0, KC_PDOT, KC_PENT, _______
+      ),
 	  
 	[2] = LAYOUT(
-	  _______, KC_F1, KC_F2,   KC_F3,   KC_F4,   KC_F5,                                                            KC_F6,   KC_F7,   KC_F8, KC_F9,   KC_F10,  KC_F11,
-	  KC_PSLS, KC_P7, KC_P8,   KC_P9,   KC_NLCK, _______, _______,                                        _______, _______, KC_PSLS, KC_P7, KC_P8,   KC_P9,   KC_F12,
-	  KC_CAPS, KC_P4, KC_P5,   KC_P6,   KC_NLCK, _______, _______,                                        _______, _______, _______, KC_P4, KC_P5,   KC_P6,   KC_NLCK,
-	  _______, KC_P1, KC_P2,   KC_P3,   _______, _______, _______, _______,  _______,  _______,  _______, _______, _______, _______, KC_P1, KC_P2,   KC_P3,   _______,
-	  _______, KC_P0, KC_PDOT, KC_PENT, _______,       _______,    _______,  _______,  _______,  _______,    _______,       _______, KC_P0, KC_PDOT, KC_PENT, _______
-	  ),
+      _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,                              KC_F6,   KC_F7,   KC_F8,   KC_F9,  KC_F10,  KC_F11,
+      _______, _______, _______, _______, _______, _______, _______,                   _______, _______, EE_CLR,  _______, _______, _______, KC_F12,
+      _______, _______, _______, _______, _______, _______, _______,                   _______, _______, RGB_TOG, _______, _______, _______, _______,
+      _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, RGB_MOD, RGB_SPI, RGB_HUI, RGB_SAI, RGB_VAI,
+      _______, _______, _______, _______, _______,      _______,     _______, _______,     _______,      RGB_RMOD, RGB_SPD, RGB_HUD, RGB_SAD, RGB_VAD
+      ),
 
 	[3] = LAYOUT(
-	  _______, _______, _______, _______, _______, _______,                                                       _______, _______, _______, _______, _______, _______,
-	  _______, _______, _______, _______, _______, _______, _______,                                     _______, _______, _______, _______, _______, _______, _______,
-	  _______, _______, _______, _______, _______, _______, _______,                                     _______, _______, _______, _______, _______, _______, _______,
-	  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-	  _______, _______, _______, _______, _______,     _______,      _______, _______, _______, _______,     _______,      _______, _______, _______, _______, _______
-	  )
-#endif
+      _______, _______, _______, _______, _______, _______,                            _______, _______, _______, _______, _______, _______,
+      _______, _______, _______, _______, _______, _______, _______,                   _______, _______, _______, _______, _______, _______, _______,
+      _______, _______, _______, _______, _______, _______, _______,                   _______, _______, _______, _______, _______, _______, _______,
+      _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
+      _______, _______, _______, _______, _______,      _______,     _______, _______,     _______,      _______, _______, _______, _______, _______
+      ),
+
+	[4] = LAYOUT(
+      _______, _______, _______, _______, _______, _______,                            _______, _______, _______, _______, _______, _______,
+      _______, _______, _______, _______, _______, _______, _______,                   _______, _______, _______, _______, _______, _______, _______,
+      _______, _______, _______, _______, _______, _______, _______,                   _______, _______, _______, _______, _______, _______, _______,
+      _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
+      _______, _______, _______, _______, _______,      _______,     _______, _______,     _______,      _______, _______, _______, _______, _______
+      )
 };
+
+#ifdef ENCODER_MAP_ENABLE
+const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
+    [0] =   { ENCODER_CCW_CW(KC_VOLD, KC_VOLU),  ENCODER_CCW_CW(KC_PGDN, KC_PGUP)  },
+    [1] =   { ENCODER_CCW_CW(_______, _______),  ENCODER_CCW_CW(_______, _______)  },
+    [2] =   { ENCODER_CCW_CW(_______, _______),  ENCODER_CCW_CW(_______, _______)  },
+    [3] =   { ENCODER_CCW_CW(_______, _______),  ENCODER_CCW_CW(_______, _______)  },
+    [4] =   { ENCODER_CCW_CW(_______, _______),  ENCODER_CCW_CW(_______, _______)  }
+};
+#endif
 
 #ifdef POINTING_DEVICE_ENABLE
 	void run_trackball_cleanup(void) {	//Set colour of trackball LED. Does not require RGBLIGHT_ENABLE if colour shorthands are not used.
-		#ifdef POINTING_DEVICE_ENABLE
 		if (trackball_is_scrolling) {
 			pimoroni_trackball_set_rgbw(217, 165, 33, 0x00);	//RGB_GOLDENROD in number form. 
-			//pimoroni_trackball_set_rgbw(43, 153, 103, 0x00);
+			pimoroni_trackball_set_cpi(3000);	//Use single scrolling speed
 		} else if (!trackball_is_precision) {
 			pimoroni_trackball_set_rgbw(0, 27, 199, 0x00);
+			pimoroni_trackball_set_cpi(30000);
 		} else {
-			//pimoroni_trackball_set_rgbw(217, 165, 33, 0x00);	//RGB_GOLDENROD in number form.
 			pimoroni_trackball_set_rgbw(43, 153, 103, 0x00);
+			pimoroni_trackball_set_cpi(12000);
 		}
-		#endif
 	}
 	
 	uint8_t pointing_device_handle_buttons(uint8_t buttons, bool pressed, pointing_device_buttons_t button) {
@@ -161,15 +124,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
 		if (trackball_is_scrolling) {
 			mouse_report.h = mouse_report.x;
-			#ifndef PIMORONI_TRACKBALL_INVERT_X
-				mouse_report.v = 0.2*mouse_report.y;	//Multiplier to lower scrolling sensitivity
+			#ifndef POINTING_DEVICE_INVERT_X
+				mouse_report.v = 1*mouse_report.y;	//Multiplier to lower scrolling sensitivity (0.1 can be used instead of 1)
 			#else
-				mouse_report.v = 0.2*-mouse_report.y;	//invert vertical scroll direction
+				mouse_report.v = 1*-mouse_report.y;	//invert vertical scroll direction
 			#endif
 			mouse_report.x = mouse_report.y = 0;
 		}
 		return mouse_report;
 	}
+	
 
 	#if !defined(MOUSEKEY_ENABLE)	//Allows for button clicks on keymap even though mousekeys is not defined.
 		static bool mouse_button_one, trackball_button_one;
@@ -187,40 +151,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 #endif
 
 
-
-void matrix_scan_user(void) {
-	#ifdef ENCODER_ENABLE
-		encoder_action_unregister(); 
-	#endif
-	
-	#ifdef SUPER_ALT_TAB_ENABLE
-		if (is_alt_tab_active) {	//Allows for use of super alt tab.
-			if (timer_elapsed(alt_tab_timer) > 1000) {
-				unregister_code(KC_LALT);
-				is_alt_tab_active = false;
-			}
-		}
-	#endif
-	#ifdef D2SKATE_MACRO_ENABLE
-		if (D2SKATE_reset == false) {	//Check if Destiny 2 skate timer is activated
-			if (timer_elapsed(D2SKATE_TIMER) > 4000) {
-				rgblight_sethsv_noeeprom(252,255,80); //Set regular game layer colour
-				D2SKATE_reset = true;
-				#ifdef HAPTIC_ENABLE
-					DRV_pulse(12);		//trp_click
-				#endif
-			}
-		}
-	#endif
-	#ifdef ENCODER_ENABLE
-		encoder_action_unregister();
-	#endif
-	if (timer_elapsed32(oled_timer) > 60000) { //60000ms = 60s
-		pimoroni_trackball_set_rgbw(0,0,0, 0x00); //Turn off Pimoroni trackball LED when computer is idle for 1 minute. Would use suspend_power_down_user but the code is not working.
-	}
-}
-
-
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 	#if defined(KEYBOARD_PET) || defined(OLED_LOGO)
 		if (record->event.pressed) { //OLED timeout code
@@ -229,56 +159,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 	#endif
 	
 	switch (keycode) { //For keycode overrides
-		#ifdef SUPER_ALT_TAB_ENABLE
-		case ATABF:	//Alt tab forwards
-			if (record->event.pressed) {
-				if (!is_alt_tab_active) {
-					is_alt_tab_active = true;
-					register_code(KC_LALT);
-				}
-					alt_tab_timer = timer_read();
-					register_code(KC_TAB);
-				} else {
-					unregister_code(KC_TAB);
-				}
-			return true;
-		case ATABR:	//Alt tab reverse
-			if (record->event.pressed) {
-				if (!is_alt_tab_active) {
-					is_alt_tab_active = true;
-					register_code(KC_LALT);
-				}
-					alt_tab_timer = timer_read();
-					register_code(KC_LSHIFT);
-					register_code(KC_TAB);
-				} else {
-					unregister_code(KC_LSHIFT);
-					unregister_code(KC_TAB);
-				}
-			return true;
-		#endif
-		  
-		case NMR:	//Move window to next monitor on right
-		  if (record->event.pressed) {
-			register_code(KC_LSFT);
-			register_code(KC_LWIN);
-			register_code(KC_RIGHT);
-			unregister_code(KC_RIGHT);
-			unregister_code(KC_LWIN);
-			unregister_code(KC_LSFT);
-		  }
-		  return true;
-		case NML:	//Move window to next monitor on left
-		  if (record->event.pressed) {
-			register_code(KC_LSFT);
-			register_code(KC_LWIN);
-			register_code(KC_LEFT);
-			unregister_code(KC_LEFT);
-			unregister_code(KC_LWIN);
-			unregister_code(KC_LSFT);
-		  }
-		  return true;
-
 		case KC_RSFT: //Shift Backspace to Delete Whole Word. Inspired by Hellsingcoder.
 			rshift_held = record->event.pressed;
 			held_shift = keycode;
@@ -323,33 +203,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 				}
 			}
 			return false;
-		#ifdef D2SKATE_MACRO_ENABLE
-			case D2SKATE:
-					if (record->event.pressed) {
-						register_code(KC_0);
-						wait_ms(34);
-						register_code(KC_SPC);
-						unregister_code(KC_0);
-						register_code(KC_X);
-						wait_ms(18);
-						unregister_code(KC_SPC);
-						unregister_code(KC_X);
-						rgblight_sethsv_noeeprom(180,255,80);
-						D2SKATE_skated = true;
-					}
-				return false;
-			case KC_1:
-			case KC_2:
-			case KC_3:
-				if (record->event.pressed) {
-					if(D2SKATE_skated){	//Start the cooldown timer
-						D2SKATE_TIMER = timer_read();
-						D2SKATE_skated = false;
-						D2SKATE_reset = false;
-					}
-				}
-				return true;
-		#endif
 
 		#ifdef POINTING_DEVICE_ENABLE //Allow modes when trackball is enabled.
 				case PM_SCROLL:
@@ -367,10 +220,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 				case PM_PRECISION:
 					if (record->event.pressed) {
 						if (trackball_is_precision){ //Enable toggling for trackball precision
-							pimoroni_trackball_set_precision(1.75);
+							//pimoroni_trackball_set_cpi(30000);	//Set it when running cleanup instead
 							trackball_is_precision=false;
 						} else{
-							pimoroni_trackball_set_precision(0.8);
+							//pimoroni_trackball_set_cpi(15000);	//Set it when running cleanup instead
 							trackball_is_precision=true;
 						}
 						run_trackball_cleanup();
@@ -442,8 +295,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 			case 0:
 				//rgblight_sethsv_noeeprom(50,255,80);	//green-blue gradient
 				//rgblight_sethsv_noeeprom(115,170,80);	//pale blue gradient
-				//rgblight_sethsv_noeeprom(0,220,60);	//yellow gradient
-				rgblight_sethsv_noeeprom(140,240,70);	//yellow gradient
+				rgblight_sethsv_noeeprom(0,220,60);	//yellow gradient
 				#ifdef POINTING_DEVICE_ENABLE
 					if (was_scrolling==true){ //Check if was scrolling when layer was left
 						trackball_is_scrolling=true;
@@ -509,19 +361,18 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 void keyboard_post_init_user(void)
 {
 	#ifdef RGBLIGHT_ENABLE
-		//rgblight_mode_noeeprom(RGBLIGHT_MODE_STATIC_GRADIENT+8); //Set to static gradient 9
-		rgblight_mode_noeeprom(RGBLIGHT_MODE_BREATHING); //Set to breathing
-		
+		rgblight_mode_noeeprom(RGBLIGHT_MODE_STATIC_GRADIENT+8); //Set to static gradient 9
+		//rgblight_mode_noeeprom(RGBLIGHT_MODE_BREATHING); //Test
 	#endif
 	layer_move(0); 						//Start on layer0 by default to set LED colours. Can remove to save a very small amount of space.
 	#ifdef POINTING_DEVICE_ENABLE
-		pimoroni_trackball_set_precision(1.75);	//Start trackball with lower precision mode
+		pimoroni_trackball_set_cpi(3000);	//Start trackball with lower precision mode and default scrolling
 		run_trackball_cleanup();
 	#endif
 }
 
 #ifdef POINTING_DEVICE_ENABLE
-	void suspend_power_down_user(void) {	//Code does not work, need to confirm why
+	void suspend_power_down_user(void) {
 			pimoroni_trackball_set_rgbw(0,0,0, 0x00); //Turn off Pimoroni trackball LED when computer is sleeping
 	}
 #endif
